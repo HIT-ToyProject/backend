@@ -43,47 +43,45 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
-            <form id="signupForm" class="validation-form" novalidate>
+            <form th:type="post" class="validation-form" novalidate th:object="${member}">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">이름</label>
-                        <input type="text" class="form-control" id="name" >
+                        <input type="text" class="form-control" id="name"
+                             th:placeholder="*{name}" readonly th:value="*{name}">
                         <div class="invalid-feedback" ></div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="email">이메일</label>
-                        <input type="email" class="form-control" id="email">
+                        <input type="email" class="form-control" id="email"
+                                th:placeholder="*{email}" readonly th:value="*{email}">
                         <div class="invalid-feedback" ></div>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="password">비밀번호</label>
-                    <input type="text" class="form-control" id="password" >
-                    <div class="invalid-feedback"></div>
-                </div>
-                <div class="mb-3">
                     <label for="studentId">학번</label>
-                    <input type="text" class="form-control" id="studentId" >
+                    <input type="text" class="form-control" id="studentId">
                     <div class="invalid-feedback"></div>
                 </div>
                 <div class="mb-3">
                     <label for="profile">profile</label>
-                    <input type="text" class="form-control" id="profile">
+                    <input type="text" class="form-control" id="profile"
+                           th:placeholder="*{profile}" readonly th:value="*{profile}">
                     <div class="invalid-feedback" ></div>
                 </div>
                 <div class="mb-3">
-                    <label for="nickname">닉네임</label>
-                    <input type="text" id="nickname" name="nickname" >
+                    <label for="nickName">닉네임</label>
+                    <input type="text" id="nickName" name="nickName">
                 </div>
 
                 <div class="mb-3">
                     <label for="gender">성별</label>
-                    <input type="radio" id="gender" name="gender" checked >남
-                    <input type="radio"   name="gender" >여
+                    <input type="radio" id="gender" name="gender" checked>남
+                    <input type="radio"  name="gender" >여
                 </div>
 
                 <div class="mb-3">
-                    <label for="major" >전공</label>
+                    <label for="major">전공</label>
                     <input type="text" class="form-control" id="major" >
                 </div>
 
@@ -100,17 +98,17 @@
         $("#signUpButton").click(function() {
             var name = $("#name").val();
             var email = $("#email").val();
-            var password = $('#password').val();
             var studentId = $("#studentId").val();
+            var nickName = $("#nickName").val();
             var profile = $("#profile").val();
             var gender = $("#gender").val();
             var major = $("#major").val();
 
-            var signUpRequest = {
+            const signUpOAuth2Request = {
                 name: name,
                 email: email,
-                password: password,
                 studentId: studentId,
+                nickName: nickName,
                 profile: profile,
                 gender: gender,
                 major: major
@@ -118,9 +116,9 @@
 
             $.ajax({
                 type: "POST",
-                url: "/signUp",
+                url: "/signUp/oauth2",
                 contentType: "application/json",
-                data: JSON.stringify(signUpRequest),
+                data: JSON.stringify(signUpOAuth2Request),
                 success: function(response) {
                     alert("Success")
                     window.location.href = "/";
