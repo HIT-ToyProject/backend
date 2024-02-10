@@ -2,11 +2,12 @@ package com.hit.community.controller.api;
 
 import com.hit.community.dto.ApiDataResponse;
 import com.hit.community.dto.ConfirmCodeRequest;
-import com.hit.community.dto.SignUpOAuth2Request;
 import com.hit.community.dto.SignUpRequest;
 import com.hit.community.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor

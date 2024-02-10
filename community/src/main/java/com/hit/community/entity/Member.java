@@ -1,6 +1,7 @@
 package com.hit.community.entity;
 
-import com.hit.community.dto.SignUpOAuth2Request;
+import com.hit.community.controller.api.SignUpOAuth2Request;
+import com.hit.community.dto.SignUpRequest;
 import jakarta.persistence.*;
 import lombok.*;
 

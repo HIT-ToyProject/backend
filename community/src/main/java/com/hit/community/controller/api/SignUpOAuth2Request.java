@@ -1,4 +1,4 @@
-package com.hit.community.dto;
+package com.hit.community.controller.api;
 
 import jakarta.validation.constraints.NotBlank;
 
