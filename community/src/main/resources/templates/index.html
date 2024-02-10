@@ -2,10 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>하공대 커뮤니티</title>
 </head>
 <body>
-<a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a>
-<a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
+        <h1>하공대 커뮤니티 사이트</h1>
+        <a href="/login">로그인</a>
 </body>
+
+<script>
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', window.location.href, true);
+        console.log(window.location.href)
+        let header;
+        var storage = localStorage.getItem("Authorization");
+        console.log(storage);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                header = xhr.getResponseHeader("Authorization");
+                console.log(xhr.getAllResponseHeaders())
+
+            }
+        }
+        xhr.setRequestHeader('Authorization', header);
+        xhr.send();
+
+
+</script>
 </html>
