@@ -1,8 +1,5 @@
 package com.hit.community.dto;
 
-import org.springframework.http.client.reactive.ClientHttpRequest;
-import org.springframework.web.reactive.function.BodyInserter;
-
 public record CustomTokenResponse(
         String accessToken,
         String refreshToken

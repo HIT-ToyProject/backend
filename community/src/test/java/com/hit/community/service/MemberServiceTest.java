@@ -1,6 +1,6 @@
 package com.hit.community.service;
 
-import com.hit.community.controller.api.SignUpOAuth2Request;
+import com.hit.community.dto.SignUpOAuth2Request;
 import com.hit.community.custom.CustomAuthenticationProvider;
 import com.hit.community.dto.*;
 import com.hit.community.entity.*;
