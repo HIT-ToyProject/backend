@@ -1,12 +1,12 @@
 package com.hit.community.dto;
 
 
+import com.hit.community.entity.LoginType;
 import com.hit.community.entity.Member;
 import com.hit.community.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -14,57 +14,61 @@ public class OAuthAttribute {
 
     private Map<String, Object> attributes;
     private String nameAttributeKey;
-    private Object nameAttributeValue;
     private String name;
     private String email;
     private String profile;
     private String provider;
     private Role role;
+    private LoginType type;
 
     @Builder
-    public OAuthAttribute(Map<String, Object> attributes, String nameAttributeKey, Object nameAttributeValue,
-                          String name, String email, String profile,Role role, String provider) {
+    public OAuthAttribute(Map<String, Object> attributes, String nameAttributeKey,
+                          String name, String email, String profile,Role role,
+                          String provider, LoginType type) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
-        this.nameAttributeValue = nameAttributeValue;
         this.name = name;
         this.email = email;
         this.profile = profile;
         this.role = role;
         this.provider = provider;
+        this.type = type;
     }
 
     public static OAuthAttribute of(
             String provider,
-            String nameAttributeKey,
             Map<String, Object> attributes
     ){
         
         switch (provider){
             case "google":
-                return ofGoogle(provider, nameAttributeKey, attributes);
+                return ofGoogle(provider, attributes);
             case "naver":
                 return ofNaver(provider, attributes);
+
+            case "kakao":
+                return ofKakao(provider, attributes);
             default: throw new RuntimeException();
         }
 
     }
 
+
+
     private static OAuthAttribute ofGoogle(
             String provider,
-            String userNameAttributeName,
             Map<String, Object> attributes
     ){
 
         return OAuthAttribute.builder()
                 .attributes(attributes)
                 .nameAttributeKey("sub")
-                .nameAttributeValue(attributes.get("sub"))
                 .name((String)attributes.get("name"))
                 .email((String)attributes.get("email"))
                 .profile((String)attributes.get("picture"))
-                .role(Role.USER)
+                .role(Role.ROLE_ADMIN)
                 .provider(provider)
+                .type(LoginType.GOOGLE)
                 .build();
     }
 
@@ -78,14 +82,31 @@ public class OAuthAttribute {
         Map<String, Object> response = (Map<String, Object>)attributes.get("response");
 
         return OAuthAttribute.builder()
-                .attributes(response)
+                .attributes(attributes)
                 .nameAttributeKey("response")
-                .nameAttributeValue(response)
                 .name((String)response.get("name"))
                 .email((String)response.get("email"))
                 .profile((String)response.get("profile_image"))
-                .role(Role.USER)
+                .role(Role.ROLE_ADMIN)
                 .provider(provider)
+                .type(LoginType.NAVER)
+                .build();
+    }
+
+    private static OAuthAttribute ofKakao(String provider, Map<String, Object> attributes) {
+        System.out.println(attributes);
+        Map<String, Object> kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
+        Map<String, Object> kakaoProfile = (Map<String, Object>)kakaoAccount.get("profile");
+
+        return OAuthAttribute.builder()
+                .attributes(attributes)
+                .nameAttributeKey("id")
+                .name((String)kakaoProfile.get("nickname"))
+                .email((String)kakaoAccount.get("email"))
+                .profile((String)kakaoProfile.get("profile_image_url"))
+                .role(Role.ROLE_ADMIN)
+                .provider(provider)
+                .type(LoginType.KAKAO)
                 .build();
     }
 
@@ -94,19 +115,9 @@ public class OAuthAttribute {
                 .name(name)
                 .email(email)
                 .profile(profile)
-                .role(role)
+                .role(Role.ROLE_GUEST)
+                .type(type)
                 .build();
     }
-
-    public Map<String, Object> convertToMap() {
-
-        Map<String, Object> map = new HashMap<>();
-        map.put(nameAttributeKey, nameAttributeValue);
-        map.put("name", name);
-        map.put("email", email);
-        map.put("profile", profile);
-        return map;
-    }
-
 
 }

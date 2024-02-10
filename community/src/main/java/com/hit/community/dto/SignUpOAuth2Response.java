@@ -1,29 +1,26 @@
 package com.hit.community.dto;
 
 import com.hit.community.entity.Member;
-import lombok.Getter;
-import lombok.Setter;
 
-public record MemberResponse(
+public record SignUpOAuth2Response(
         String name,
         String email,
         String profile
 ) {
 
-    public static MemberResponse of(
+    public static SignUpOAuth2Response of(
             String name,
             String email,
             String profile
     ){
-        return new MemberResponse(name, email, profile);
+        return new SignUpOAuth2Response(name, email, profile);
     }
 
-    public static MemberResponse fromMemberResponse(Member member){
-        return MemberResponse.of(
+    public static SignUpOAuth2Response fromMemberResponse(Member member){
+        return SignUpOAuth2Response.of(
                 member.getName(),
                 member.getEmail(),
                 member.getProfile()
         );
     }
-
 }

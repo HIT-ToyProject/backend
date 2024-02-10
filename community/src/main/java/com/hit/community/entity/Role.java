@@ -1,16 +1,15 @@
 package com.hit.community.entity;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
 public enum Role {
-    
-    GUEST("ROLE_GUEST", "손님"),
-    USER("ROLE_USER", "일반 사용자");
-
-    private final String key;
-    private final String title;
-
+    ROLE_GUEST, ROLE_ADMIN, ROLE_USER;
+    public static Role checkRole(String role){
+        return switch (role) {
+            case "ROLE_GUEST" -> ROLE_GUEST;
+            case "ROLE_ADMIN" -> ROLE_ADMIN;
+            default -> ROLE_USER;
+        };
+    }
 }
