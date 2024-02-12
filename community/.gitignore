@@ -190,3 +190,4 @@ application.yml
 application-oauth.yml
 application-mail.yml
 application-database.yml
+application.properties
