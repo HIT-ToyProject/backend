@@ -189,3 +189,4 @@ gradle-app.setting
 application.yml
 application-oauth.yml
 application-mail.yml
+application-database.yml

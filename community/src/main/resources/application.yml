@@ -2,25 +2,4 @@ server:
   port: 9090
 spring:
   profiles:
-    include: oauth, mail
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/Hit-Community
-    username: root
-    password: Yun970804*
-  jpa:
-    hibernate:
-      ddl-auto: create
-    show-sql: true
-    properties:
-      hibernate:
-        dialect=org:
-            dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-    defer-datasource-initialization: true
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  sql:
-    init:
-      mode: always
+    include: oauth, mail, database
