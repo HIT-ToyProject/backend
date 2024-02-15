@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MailService mailService;
+    private final AwsMailService awsMailService;
     private final MailRepository mailRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -96,7 +96,7 @@ public class MemberService {
     @Transactional
     public boolean sendCodeToEmail(String email) {
         emailDuplicateCheck(email);
-        Mail createdMail = mailService.createMessage(email);
+        Mail createdMail = awsMailService.createMessage(email);
         if (!Strings.hasText(createdMail.getConfirmCode())) {
             throw new CustomException(ErrorCode.CONFIRM_CODE_NOT_EXISTS);
         }

@@ -1,33 +1,29 @@
 package com.hit.community.service;
 
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.model.*;
 import com.hit.community.entity.Mail;
 import com.hit.community.error.CustomException;
 import com.hit.community.error.ErrorCode;
-import jakarta.mail.Message;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-
 @RequiredArgsConstructor
 @Service
-public class MailService {
+public class AwsMailService {
 
-    private final JavaMailSender mailSender;
+    private final AmazonSimpleEmailService amazonSimpleEmailService;
     private static final String SENDER = "sunnamgung8@naver.com";
 
     public Mail createMessage(String toEmail){
-        MimeMessage message = mailSender.createMimeMessage();
+        SendEmailRequest sendEmailRequest = new SendEmailRequest();
+
         String confirmCode = getConfirmCode();
-        try{
+
             String subject = "HCC 인증 메일입니다.";
 
             String html = "";
@@ -43,21 +39,21 @@ public class MailService {
             html += confirmCode;
             html += "<span style=\"font-size: 24px;\"></span>입니다.";
 
-            message.addRecipients(Message.RecipientType.TO,toEmail);
-            message.setFrom(new InternetAddress(SENDER, "HIT"));
-            message.setSubject(subject);
-            message.setText(html, "utf-8", "html");
-        } catch (UnsupportedEncodingException e){
-            throw new CustomException(ErrorCode.UN_SUPPORTED_ENCODING);
-        } catch (Exception e){
-            throw new CustomException(ErrorCode.MESSAGING);
-        }
-
-        mailSender.send(message);
-        return Mail.builder().toEmail(toEmail).confirmCode(confirmCode).build();
+            sendEmailRequest.withSource(SENDER)
+                    .withDestination(new Destination().withToAddresses(toEmail))
+                    .withMessage(
+                            new Message()
+                                    .withSubject(createContent(subject))
+                                    .withBody(new Body().withHtml(createContent(html)))
+                    );
+            amazonSimpleEmailService.sendEmail(sendEmailRequest);
+            return Mail.builder().confirmCode(confirmCode).build();
 
     }
 
+    private Content createContent(String text){
+        return new Content().withCharset(StandardCharsets.UTF_8.name()).withData(text);
+    }
     private String getConfirmCode(){
         int length = 6;
 

@@ -45,7 +45,7 @@ MemberServiceTest {
     @Mock
     private MailRepository mailRepository;
     @Mock
-    private MailService mailService;
+    private AwsMailService awsMailService;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
@@ -301,14 +301,14 @@ MemberServiceTest {
 
         //given
         given(memberRepository.existsByEmail(anyString())).willReturn(false);
-        given(mailService.createMessage(anyString())).willReturn(mail);
+        given(awsMailService.createMessage(anyString())).willReturn(mail);
         given(mailRepository.findByToEmail(anyString())).willReturn(Optional.empty());
         //when
         boolean isTrue = memberService.sendCodeToEmail(email);
         //then
         assertThat(isTrue).isTrue();
         then(memberRepository).should().existsByEmail(anyString());
-        then(mailService).should().createMessage(anyString());
+        then(awsMailService).should().createMessage(anyString());
         then(mailRepository).should().findByToEmail(anyString());
     }
     @Test
@@ -320,14 +320,14 @@ MemberServiceTest {
 
         //given
         given(memberRepository.existsByEmail(anyString())).willReturn(false);
-        given(mailService.createMessage(anyString())).willReturn(mail);
+        given(awsMailService.createMessage(anyString())).willReturn(mail);
         given(mailRepository.findByToEmail(anyString())).willReturn(Optional.of(mail));
         //when
         boolean isTrue = memberService.sendCodeToEmail(email);
         //then
         assertThat(isTrue).isTrue();
         then(memberRepository).should().existsByEmail(anyString());
-        then(mailService).should().createMessage(anyString());
+        then(awsMailService).should().createMessage(anyString());
         then(mailRepository).should().findByToEmail(anyString());
     }
     @Test
@@ -354,7 +354,7 @@ MemberServiceTest {
                 .build();
         //given
         given(memberRepository.existsByEmail(anyString())).willReturn(false);
-        given(mailService.createMessage(anyString())).willReturn(mail);
+        given(awsMailService.createMessage(anyString())).willReturn(mail);
         //when
         RuntimeException exception = catchRuntimeException(() -> memberService.sendCodeToEmail(email));
         //then
