@@ -17,8 +17,7 @@ public class Member extends BaseTime {
     private String name;
     @Column(nullable = false)
     private String email;
-
-    @Column(unique = true)
+    
     private String profile;
     private String studentId;
     private String password;
